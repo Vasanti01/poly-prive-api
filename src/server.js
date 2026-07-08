@@ -64,8 +64,6 @@ app.use((error, _req, res, _next) => {
 });
 
 async function start() {
-  try {
-    await initMoralis();
     app.listen(port, () => {
       console.log(`Poly Privé AI API listening on port ${port}`);
     });
