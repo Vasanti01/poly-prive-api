@@ -1,0 +1,28 @@
+{
+  "name": "poly-prive-api",
+  "version": "1.0.0",
+  "description": "Production-ready Express API for Poly Privé AI wallet intelligence",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "express",
+    "moralis",
+    "web3",
+    "wallet",
+    "poly-prive"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "moralis": "^2.27.2"
+  }
+}
