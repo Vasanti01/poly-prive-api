@@ -1,7 +1,10 @@
-import chatRoutes from "./routes/chat.js";import "dotenv/config";
+import "dotenv/config";
 import cors from "cors";
 import express from "express";
-import walletRoutes from "./routes/wallet.js";app.use("/chat", chatRoutes);
+
+import walletRoutes from "./routes/wallet.js";
+import chatRoutes from "./routes/chat.js";
+
 import { initMoralis } from "./services/moralis.js";
 
 const app = express();
@@ -35,6 +38,7 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/wallet", walletRoutes);
+app.use("/chat", chatRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({
@@ -64,12 +68,14 @@ app.use((error, _req, res, _next) => {
 });
 
 async function start() {
+  try {
+    await initMoralis();
+
     app.listen(port, () => {
       console.log(`Poly Privé AI API listening on port ${port}`);
     });
+  } catch (error) {
+    console.error("Failed to start server:", error.message);
+    process.exit(1);
   }
-
-
-start();
-
-export default app;
+}
