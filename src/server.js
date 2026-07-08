@@ -1,7 +1,7 @@
-import "dotenv/config";
+import chatRoutes from "./routes/chat.js";import "dotenv/config";
 import cors from "cors";
 import express from "express";
-import walletRoutes from "./routes/wallet.js";
+import walletRoutes from "./routes/wallet.js";app.use("/chat", chatRoutes);
 import { initMoralis } from "./services/moralis.js";
 
 const app = express();
