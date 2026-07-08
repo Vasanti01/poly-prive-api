@@ -5,7 +5,7 @@
   "type": "module",
   "main": "src/server.js",
   "scripts": {
-    "start": "start": "node --enable-source-maps src/server.js",
+    "start": "node src/server.js",
     "dev": "node --watch src/server.js"
   },
   "engines": {
