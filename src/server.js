@@ -67,11 +67,8 @@ async function start() {
     app.listen(port, () => {
       console.log(`Poly Privé AI API listening on port ${port}`);
     });
-  } catch (error) {
-    console.error("Failed to start server:", error.message);
-    process.exit(1);
   }
-}
+
 
 start();
 
