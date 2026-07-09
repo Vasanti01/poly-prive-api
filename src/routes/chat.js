@@ -1,5 +1,7 @@
 import express from "express";
 import { chat } from "../services/ai.js";
+import { detectWallet } from "../utils/detectWallet.js";
+import { analyzeWallet } from "../services/walletAI.js";
 
 const router = express.Router();
 
@@ -14,19 +16,30 @@ router.post("/", async (req, res) => {
       });
     }
 
+    const address = detectWallet(message);
+
+    if (address) {
+      const wallet = await analyzeWallet(address);
+
+      return res.json({
+        success: true,
+        wallet
+      });
+    }
+
     const reply = await chat(message);
 
-    res.json({
+    return res.json({
       success: true,
-      reply,
+      reply
     });
 
   } catch (err) {
     console.error(err);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      error: err.message,
+      error: err.message
     });
   }
 });
