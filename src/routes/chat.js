@@ -1,5 +1,5 @@
 import express from "express";
-import openai from "../services/openai.js";
+import ai from "../services/gemini.js";
 
 const router = express.Router();
 
@@ -14,25 +14,31 @@ router.post("/", async (req, res) => {
       });
     }
 
-    const response = await openai.responses.create({
-      model: "gpt-4.1-mini",
-      input: [
-        {
-          role: "system",
-          content:
-            "You are Poly Privé AI, an expert assistant for the Polygon ecosystem. Help users with Polygon PoS, zkEVM, AggLayer, validators, wallets, staking, and blockchain questions.",
-        },
-        {
-          role: "user",
-          content: message,
-        },
-      ],
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: `
+You are Poly Privé AI.
+
+You are an expert on:
+- Polygon
+- Polygon PoS
+- AggLayer
+- zkEVM
+- Validators
+- Wallets
+- Staking
+- Web3
+
+User question:
+${message}
+`,
     });
 
     res.json({
       success: true,
-      reply: response.output_text,
+      reply: response.text,
     });
+
   } catch (err) {
     console.error(err);
 
