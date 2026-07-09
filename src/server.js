@@ -4,18 +4,12 @@ import express from "express";
 
 import walletRoutes from "./routes/wallet.js";
 import chatRoutes from "./routes/chat.js";
-
 import { initMoralis } from "./services/moralis.js";
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
 
-const corsOrigin = process.env.CORS_ORIGIN || "*";
-app.use(
-  cors({
-    origin: corsOrigin === "*" ? true : corsOrigin.split(",").map((origin) => origin.trim()),
-  })
-);
+app.use(cors({ origin: true }));
 app.use(express.json());
 
 app.get("/health", (_req, res) => {
@@ -32,7 +26,8 @@ app.get("/", (_req, res) => {
     version: "1.0.0",
     endpoints: {
       health: "GET /health",
-      wallet: "GET /wallet/:address?chain=eth",
+      wallet: "GET /wallet/:address",
+      chat: "POST /chat",
     },
   });
 });
@@ -51,18 +46,13 @@ app.use((_req, res) => {
 });
 
 app.use((error, _req, res, _next) => {
-  const statusCode = error.statusCode || error.status || 500;
-  const isServerError = statusCode >= 500;
+  console.error(error);
 
-  console.error("[Poly Privé AI]", error);
-
-  res.status(statusCode).json({
+  res.status(error.statusCode || 500).json({
     success: false,
     error: {
-      code: error.code || (isServerError ? "INTERNAL_ERROR" : "REQUEST_ERROR"),
-      message: isServerError
-        ? "Unable to fetch wallet data. Please try again later."
-        : error.message || "Invalid request.",
+      code: error.code || "INTERNAL_ERROR",
+      message: error.message,
     },
   });
 });
@@ -75,7 +65,11 @@ async function start() {
       console.log(`Poly Privé AI API listening on port ${port}`);
     });
   } catch (error) {
-    console.error("Failed to start server:", error.message);
+    console.error(error);
     process.exit(1);
   }
 }
+
+start();
+
+export default app;
