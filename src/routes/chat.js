@@ -1,5 +1,5 @@
 import express from "express";
-import ai from "../services/gemini.js";
+import { chat } from "../services/ai.js";
 
 const router = express.Router();
 
@@ -14,29 +14,11 @@ router.post("/", async (req, res) => {
       });
     }
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: `
-You are Poly Privé AI.
-
-You are an expert on:
-- Polygon
-- Polygon PoS
-- AggLayer
-- zkEVM
-- Validators
-- Wallets
-- Staking
-- Web3
-
-User question:
-${message}
-`,
-    });
+    const reply = await chat(message);
 
     res.json({
       success: true,
-      reply: response.text,
+      reply,
     });
 
   } catch (err) {
